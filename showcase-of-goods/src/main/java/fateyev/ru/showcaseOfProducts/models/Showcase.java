@@ -7,8 +7,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -27,12 +28,18 @@ public class Showcase {
     private UUID showcaseId;
 
     @Column(name = "name", nullable = false)
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 50, message = "Name should be between 2 and 50 characters")
     private String name;
 
     @Column(name = "address", nullable = false)
+    @NotEmpty(message = "Address should not be empty")
+    @Size(min = 2, max = 250, message = "Address should be between 2 and 250 characters")
     private String address;
 
     @Column(name = "type", nullable = false)
+    @NotEmpty(message = "Type should not be empty")
+    @Size(min = 2, max = 50, message = "Type should be between 2 and 50 characters")
     private String type;
 
     @CreationTimestamp
