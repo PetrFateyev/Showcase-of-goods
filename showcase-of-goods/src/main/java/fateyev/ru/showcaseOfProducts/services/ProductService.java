@@ -5,11 +5,10 @@ import fateyev.ru.showcaseOfProducts.repositories.ProductRepository;
 import fateyev.ru.showcaseOfProducts.repositories.ShowcaseRepository;
 import fateyev.ru.showcaseOfProducts.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,11 +24,14 @@ public class ProductService {
         this.showcaseRepository = showcaseRepository;
     }
 
-    public Page<Product> findAll(Specification<Product> specification, Pageable pageable, UUID showcaseId) {
+    public List<Product> findAll(Specification<Product> specification, UUID showcaseId) {
         if (!showcaseRepository.existsById(showcaseId)){
             throw new NotFoundException("Showcase with this id was not found");
         }
-        return productRepository.findAll(specification, pageable);
+        List<Product> products = productRepository.findAll(specification);
+        List<Product> pr = productRepository.findAllByShowcaseShowcaseId(showcaseId);
+        products.retainAll(pr);
+        return products;
     }
 
     @Transactional
